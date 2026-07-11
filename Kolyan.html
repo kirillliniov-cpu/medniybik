@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Скачать видеокарты</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            min-height: 100dvh;
+            background: #020202;
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+
+        body.show-gift {
+            background-image: url('background.gif');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.96);
+            z-index: -1;
+            transition: background 0.4s ease;
+        }
+
+        body.show-gift::before {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        #introScreen {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            min-height: 100dvh;
+            background: rgba(0, 0, 0, 0.98);
+            z-index: 10;
+        }
+
+        .introContent {
+            text-align: center;
+            max-width: 90%;
+            padding: 40px 30px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 24px;
+            box-shadow: 0 0 120px rgba(255, 255, 255, 0.08);
+            background: rgba(8, 8, 8, 0.85);
+            backdrop-filter: blur(14px);
+        }
+
+        #introScreen h1 {
+            color: #f8f8f8;
+            font-size: 56px;
+            letter-spacing: 0.15em;
+            line-height: 1.05;
+            margin-bottom: 22px;
+            text-shadow: 0 0 24px rgba(248, 248, 248, 0.18), 0 0 60px rgba(248, 248, 248, 0.06);
+            opacity: 0.95;
+            text-transform: uppercase;
+            animation: none;
+        }
+
+        .buttonGroup {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            align-items: center;
+            margin-top: 22px;
+        }
+
+        .actionButton {
+            border: none;
+            cursor: pointer;
+            padding: 18px 42px;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: 999px;
+            background: linear-gradient(135deg, rgba(140, 96, 255, 0.95), rgba(0, 220, 255, 0.95));
+            color: #050816;
+            box-shadow: 0 18px 60px rgba(0, 220, 255, 0.22);
+            transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+            min-width: 260px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .actionButton:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 24px 72px rgba(0, 220, 255, 0.3);
+            opacity: 0.98;
+        }
+
+        .actionButton:active {
+            transform: translateY(0);
+            box-shadow: 0 12px 32px rgba(0, 220, 255, 0.22);
+        }
+
+        .actionButton::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 999px;
+            background: radial-gradient(circle at top left, rgba(255,255,255,0.4), transparent 40%);
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+            #introScreen h1 {
+                font-size: 42px;
+                letter-spacing: 0.3em;
+            }
+
+            .actionButton {
+                width: 100%;
+                max-width: 320px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #introScreen {
+                padding: 0 16px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100dvh;
+                min-height: 100svh;
+            }
+
+            .introContent {
+                width: 100%;
+                max-width: 360px;
+                margin: 0 auto;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            #introScreen h1 {
+                font-size: 32px;
+                letter-spacing: 0.2em;
+                text-align: center;
+            }
+
+            .buttonGroup {
+                width: 100%;
+                align-items: center;
+            }
+
+            .actionButton {
+                font-size: 16px;
+                padding: 16px 28px;
+                width: 100%;
+                max-width: 280px;
+            }
+        }
+
+        .container {
+            position: relative;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 120px;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 
+                0 0 20px rgba(255, 255, 255, 0.5),
+                0 0 40px rgba(255, 255, 255, 0.3),
+                0 0 60px rgba(255, 255, 255, 0.2);
+            letter-spacing: 10px;
+            animation: glow 2s ease-in-out infinite;
+            margin: 20px;
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                text-shadow: 
+                    0 0 20px rgba(255, 255, 255, 0.5),
+                    0 0 40px rgba(255, 255, 255, 0.3),
+                    0 0 60px rgba(255, 255, 255, 0.2);
+                transform: scale(1);
+            }
+            50% {
+                text-shadow: 
+                    0 0 30px rgba(255, 255, 255, 0.8),
+                    0 0 60px rgba(255, 255, 255, 0.5),
+                    0 0 100px rgba(255, 255, 255, 0.3);
+                transform: scale(1.05);
+            }
+        }
+
+        .subtitle {
+            font-size: 60px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 30px;
+            display: block;
+            text-align: center;
+            animation: none;
+        }
+
+        .progressText {
+            font-size: 72px;
+            color: #ff4d4d;
+            margin-top: 18px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: 0 0 18px rgba(255, 77, 77, 0.35);
+            animation: none;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .particles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 6s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        /* Мобильная оптимизация */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 56px;
+                letter-spacing: 4px;
+                margin: 10px;
+                animation: none;
+            }
+
+            .subtitle {
+                font-size: 36px;
+                margin-top: 15px;
+            }
+
+            .container {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 36px;
+                letter-spacing: 2px;
+                margin: 5px;
+            }
+
+            .subtitle {
+                font-size: 32px;
+                margin-top: 10px;
+                display: block;
+                text-align: center;
+            }
+
+            body {
+                background-attachment: scroll;
+            }
+
+            .introContent {
+                padding: 24px 18px;
+                margin-top: 8px;
+            }
+
+            #introScreen h1 {
+                font-size: 28px;
+                line-height: 1.1;
+                letter-spacing: 0.08em;
+                margin-bottom: 14px;
+            }
+
+            .container {
+                padding: 20px 16px;
+                transform: translateY(-8vh);
+            }
+
+            .container h1 {
+                font-size: 40px;
+                letter-spacing: 3px;
+                margin: 8px 0 12px;
+            }
+
+            .particles {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="introScreen">
+        <div class="introContent">
+            <h1>Скачать видеокарту</h1>
+            <div class="buttonGroup">
+                <button id="giftButton" class="actionButton">Скачать RTX 1488</button>
+                <button class="actionButton">Скачать RTX 1337</button>
+                <button class="actionButton">Скачать RX 228</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="particles" id="particlesContainer"></div>
+    
+    <div class="container" id="mainContent" style="display: none;">
+        <h1>ВЫКАЧИВАНИЕ БОБУКСОВ С УСТРОЙСТВА</h1>
+        <div class="progressText" id="downloadProgress">0%</div>
+        <p class="subtitle">🤙🤙🤙😈😈😈</p>
+    </div>
+
+    <audio id="birthdayAudio" preload="auto">
+        <source src="aero-chord-surface_r3JBf9Yx.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const container = document.getElementById('particlesContainer');
+        const mainContent = document.getElementById('mainContent');
+        const introScreen = document.getElementById('introScreen');
+        const birthdayAudio = document.getElementById('birthdayAudio');
+        const actionButtons = document.querySelectorAll('.actionButton');
+        const progressText = document.getElementById('downloadProgress');
+        const isMobile = window.innerWidth <= 480;
+        let audioLooped = false;
+        let particlesStarted = false;
+        let progressTimer = null;
+
+        actionButtons.forEach(button => {
+            button.addEventListener('click', showGift);
+        });
+
+        birthdayAudio.addEventListener('ended', () => {
+            if (!audioLooped) {
+                audioLooped = true;
+                birthdayAudio.currentTime = 3;
+                birthdayAudio.play().catch(err => {
+                    console.log('Ошибка при перезапуске аудио:', err);
+                });
+            } else {
+                birthdayAudio.currentTime = 3;
+                birthdayAudio.play().catch(err => {
+                    console.log('Ошибка при зацикливании аудио:', err);
+                });
+            }
+        });
+
+        function showGift() {
+            introScreen.style.display = 'none';
+            mainContent.style.display = 'block';
+            document.body.classList.add('show-gift');
+
+            if (!isMobile && !particlesStarted) {
+                startParticles();
+                particlesStarted = true;
+            }
+
+            animateProgress();
+
+            const playPromise = birthdayAudio.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(err => {
+                    console.log('Ошибка воспроизведения аудио:', err);
+                });
+            }
+        }
+
+        function animateProgress() {
+            if (progressTimer) {
+                clearInterval(progressTimer);
+            }
+
+            let current = 0;
+            const target = 1488;
+            const stepTime = 80;
+            const firstPhaseDuration = 2200;
+            const secondPhaseDuration = 1800;
+            const firstPhaseSteps = Math.ceil(firstPhaseDuration / stepTime);
+            const secondPhaseSteps = Math.ceil(secondPhaseDuration / stepTime);
+            const firstPhaseIncrement = 100 / firstPhaseSteps;
+            const secondPhaseIncrement = (target - 100) / secondPhaseSteps;
+            let phase = 0;
+            let lastDisplayedValue = -1;
+
+            progressText.textContent = '0%';
+
+            progressTimer = setInterval(() => {
+                if (phase === 0) {
+                    current += firstPhaseIncrement;
+                    if (current >= 100) {
+                        current = 100;
+                        phase = 1;
+                    }
+                } else {
+                    current += secondPhaseIncrement;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(progressTimer);
+                        progressTimer = null;
+                    }
+                }
+
+                const displayValue = Math.floor(current);
+                if (displayValue !== lastDisplayedValue) {
+                    progressText.textContent = `${displayValue}%`;
+                    lastDisplayedValue = displayValue;
+                }
+            }, stepTime);
+        }
+
+        function startParticles() {
+            function createParticle() {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = '100vh';
+                particle.style.animationDelay = Math.random() * 2 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 5) + 's';
+                container.appendChild(particle);
+                setTimeout(() => particle.remove(), 9000);
+            }
+            setInterval(createParticle, 500);
+            for (let i = 0; i < 3; i++) {
+                createParticle();
+            }
+        }
+
+        if (isMobile) {
+            container.style.display = 'none';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.body.classList.remove('show-gift');
+        });
+    </script>
+</body>
+</html>
